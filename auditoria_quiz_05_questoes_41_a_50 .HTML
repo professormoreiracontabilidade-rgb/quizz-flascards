@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz 05 — Questões de 41 a 50</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;background:#f3f7fc;color:#222;line-height:1.6;padding-bottom:100px}
+header{background:linear-gradient(135deg,#0b57d0,#3d8bfd);color:white;text-align:center;padding:25px;box-shadow:0 3px 10px rgba(0,0,0,.15)}
+header h1{font-size:30px;margin-bottom:10px}
+header h2{font-size:22px;font-weight:normal}
+.container{width:95%;max-width:1100px;margin:25px auto}
+.scoreboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:25px}
+.score-card{background:white;border-radius:15px;padding:20px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,.08)}
+.score-card h3{margin-bottom:10px;font-size:18px}
+.score-card span{font-size:30px;font-weight:bold}
+.question-card{background:#dff1ff;border-radius:18px;padding:25px;margin-bottom:20px;box-shadow:0 4px 12px rgba(0,0,0,.08);animation:fadeIn .4s ease}
+.question-header{font-size:22px;font-weight:bold;margin-bottom:20px;color:#004080}
+.question-text{font-size:20px;white-space:pre-line}
+.options{margin-top:25px}
+.option{background:#dfffe3;border:2px solid #bdf5c5;border-radius:14px;padding:18px;margin-bottom:14px;cursor:pointer;transition:.3s;font-size:18px}
+.option:hover{background:#c9ffd2;transform:scale(1.01)}
+.option.correct{background:#72df8d!important;border-color:#1d8d3f;color:#073d19;font-weight:bold}
+.option.wrong{background:#ff9b9b!important;border-color:#c62828;color:#630000;font-weight:bold}
+.comment{margin-top:20px;background:#ffe2e2;border-left:8px solid #ff4b4b;border-radius:12px;padding:20px;display:none;animation:fadeIn .4s ease}
+.comment h4{margin-bottom:10px;font-size:20px}
+.navigation{display:flex;justify-content:center;gap:15px;margin:30px 0;flex-wrap:wrap}
+.nav-btn{padding:15px 24px;border:none;border-radius:12px;background:#0b57d0;color:white;cursor:pointer;font-size:17px;transition:.3s}
+.nav-btn:hover{background:#003d99}
+.grid{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:30px}
+.grid-btn{width:50px;height:50px;border:none;border-radius:12px;font-size:18px;font-weight:bold;cursor:pointer;transition:.3s;background:#d9d9d9}
+.grid-btn.current{background:#2196f3;color:white}
+.grid-btn.correct{background:#4caf50;color:white}
+.grid-btn.wrong{background:#f44336;color:white}
+.legend{margin-top:30px;display:flex;flex-wrap:wrap;justify-content:center;gap:20px}
+.legend-item{display:flex;align-items:center;gap:10px;font-size:16px}
+.legend-color{width:25px;height:25px;border-radius:8px}
+.print-btn{display:block;margin:35px auto;padding:18px 30px;border:none;border-radius:14px;background:#00a651;color:white;font-size:20px;cursor:pointer}
+.print-btn:hover{background:#008542}
+footer{position:fixed;bottom:0;left:0;width:100%;background:#0b57d0;color:white;text-align:center;padding:12px;font-size:16px}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){.question-text{font-size:18px}.option{font-size:17px}header h1{font-size:24px}header h2{font-size:19px}}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>CURSO DE CONTABILIDADE PROFESSOR MOREIRA</h1>
+<h2>Quiz 05 — Questões de 41 a 50</h2>
+</header>
+
+<div class="container">
+
+<div class="scoreboard">
+<div class="score-card"><h3>✅ Acertos</h3><span id="hits">0</span></div>
+<div class="score-card"><h3>❌ Erros</h3><span id="errors">0</span></div>
+<div class="score-card"><h3>📌 Não Respondidas</h3><span id="notAnswered">10</span></div>
+</div>
+
+<div id="quiz"></div>
+
+<div class="navigation">
+<button class="nav-btn" onclick="previousQuestion()">⬅ Questão Anterior</button>
+<button class="nav-btn" onclick="nextQuestion()">Próxima Questão ➡</button>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="legend">
+<div class="legend-item"><div class="legend-color" style="background:#d9d9d9;"></div>Não respondeu</div>
+<div class="legend-item"><div class="legend-color" style="background:#4caf50;"></div>Acertou</div>
+<div class="legend-item"><div class="legend-color" style="background:#f44336;"></div>Errou</div>
+<div class="legend-item"><div class="legend-color" style="background:#2196f3;"></div>Questão atual</div>
+</div>
+
+<button class="print-btn" onclick="printAllQuestions()">🖨 Imprimir PDF</button>
+
+</div>
+
+<footer>Curso de Contabilidade Professor Moreira</footer>
+
+<script>
+const questions = [
+{
+question:`FGV - Auditoria/2024
+
+O objetivo principal da auditoria independente é:`,
+options:[
+"a) detectar todas as fraudes existentes.",
+"b) substituir a administração da entidade.",
+"c) aumentar a confiança dos usuários nas demonstrações contábeis.",
+"d) garantir continuidade operacional da entidade.",
+"e) eliminar completamente o risco de auditoria."
+],
+answer:2,
+comment:"Gabarito: C. O objetivo da auditoria independente é aumentar o grau de confiança dos usuários nas demonstrações contábeis."
+},
+{
+question:`FGV - Auditoria/2024
+
+A opinião do auditor é formada com base:`,
+options:[
+"a) apenas em entrevistas.",
+"b) exclusivamente em relatórios internos.",
+"c) em evidências apropriadas e suficientes obtidas durante a auditoria.",
+"d) exclusivamente em confirmação bancária.",
+"e) apenas na confiança na administração."
+],
+answer:2,
+comment:"Gabarito: C. A opinião do auditor deve ser fundamentada em evidências de auditoria apropriadas e suficientes."
+},
+{
+question:`FGV - Auditoria/2024
+
+A responsabilidade pelos controles internos é:`,
+options:[
+"a) exclusivamente do auditor.",
+"b) exclusivamente dos acionistas.",
+"c) da administração e dos responsáveis pela governança.",
+"d) do conselho fiscal apenas.",
+"e) do auditor e da governança conjuntamente."
+],
+answer:2,
+comment:"Gabarito: C. A responsabilidade pelos controles internos é da administração e, quando aplicável, dos responsáveis pela governança."
+},
+{
+question:`FGV - Auditoria/2024
+
+A auditoria não garante:`,
+options:[
+"a) redução do risco de auditoria.",
+"b) emissão de opinião profissional.",
+"c) segurança absoluta sobre as demonstrações contábeis.",
+"d) obtenção de evidências apropriadas.",
+"e) aplicação de julgamento profissional."
+],
+answer:2,
+comment:"Gabarito: C. A auditoria fornece asseguração razoável, e não segurança absoluta."
+},
+{
+question:`FGV - Auditoria/2024
+
+As distorções relevantes são aquelas que:`,
+options:[
+"a) decorrem exclusivamente de fraude.",
+"b) influenciam decisões econômicas dos usuários.",
+"c) possuem apenas natureza quantitativa.",
+"d) independem da materialidade.",
+"e) são irrelevantes para usuários externos."
+],
+answer:1,
+comment:"Gabarito: B. Distorções relevantes são aquelas que podem influenciar as decisões econômicas tomadas pelos usuários."
+},
+{
+question:`FGV - Auditoria/2024
+
+O auditor deve identificar e avaliar riscos de distorção relevante:`,
+options:[
+"a) apenas decorrentes de fraude.",
+"b) somente em contas patrimoniais.",
+"c) decorrentes de fraude ou erro.",
+"d) exclusivamente nas demonstrações consolidadas.",
+"e) apenas em entidades de grande porte."
+],
+answer:2,
+comment:"Gabarito: C. O auditor deve identificar e avaliar riscos de distorção relevante decorrentes de fraude ou erro."
+},
+{
+question:`FGV - Auditoria/2024
+
+O planejamento da auditoria é importante porque:`,
+options:[
+"a) elimina integralmente o risco de auditoria.",
+"b) substitui os testes substantivos.",
+"c) auxilia na condução eficaz e eficiente do trabalho.",
+"d) dispensa supervisão da equipe.",
+"e) impede completamente distorções relevantes."
+],
+answer:2,
+comment:"Gabarito: C. O planejamento auxilia o auditor a conduzir o trabalho de forma eficaz e eficiente."
+},
+{
+question:`FGV - Auditoria/2024
+
+O auditor deve manter ceticismo profissional:`,
+options:[
+"a) somente quando houver suspeita de fraude.",
+"b) apenas na fase de planejamento.",
+"c) durante toda a auditoria.",
+"d) exclusivamente em auditorias externas.",
+"e) apenas ao emitir relatório."
+],
+answer:2,
+comment:"Gabarito: C. O ceticismo profissional deve ser mantido durante toda a auditoria."
+},
+{
+question:`FGV - Auditoria/2024
+
+A opinião do auditor refere-se:`,
+options:[
+"a) à eficiência operacional da entidade.",
+"b) à viabilidade futura da empresa.",
+"c) à conformidade das demonstrações contábeis com a estrutura de relatório financeiro aplicável.",
+"d) ao desempenho dos administradores.",
+"e) à lucratividade futura da entidade."
+],
+answer:2,
+comment:"Gabarito: C. A opinião do auditor trata da conformidade das demonstrações contábeis com a estrutura de relatório financeiro aplicável."
+},
+{
+question:`FGV - Auditoria/2024
+
+A maioria das evidências de auditoria é:`,
+options:[
+"a) conclusiva e absoluta.",
+"b) exclusivamente documental.",
+"c) persuasiva e não conclusiva.",
+"d) baseada apenas em confirmação externa.",
+"e) obtida exclusivamente por inspeção física."
+],
+answer:2,
+comment:"Gabarito: C. A maior parte das evidências de auditoria é persuasiva, e não conclusiva."
+}
+];
+
+let currentQuestion = 0;
+let answers = new Array(questions.length).fill(null);
+
+function renderQuestion(){
+const quiz = document.getElementById("quiz");
+const q = questions[currentQuestion];
+
+quiz.innerHTML = `
+<div class="question-card">
+<div class="question-header">Questão ${currentQuestion + 41}</div>
+<div class="question-text">${q.question.replace(/\n/g,'<br>')}</div>
+<div class="options">
+${q.options.map((option,index)=>`
+<div class="option ${getOptionClass(index)}" onclick="selectAnswer(${index})">${option}</div>
+`).join('')}
+</div>
+<div class="comment" id="commentBox">
+<h4>Comentário</h4>
+${q.comment}
+</div>
+</div>
+`;
+
+if(answers[currentQuestion] !== null){
+document.getElementById("commentBox").style.display = "block";
+}
+
+updateGrid();
+}
+
+function getOptionClass(index){
+const answer = answers[currentQuestion];
+if(answer === null) return "";
+if(index === questions[currentQuestion].answer) return "correct";
+if(index === answer && answer !== questions[currentQuestion].answer) return "wrong";
+return "";
+}
+
+function selectAnswer(index){
+if(answers[currentQuestion] !== null) return;
+answers[currentQuestion] = index;
+updateScore();
+renderQuestion();
+}
+
+function updateScore(){
+let hits = 0;
+let errors = 0;
+let notAnswered = 0;
+
+answers.forEach((answer,index)=>{
+if(answer === null) notAnswered++;
+else if(answer === questions[index].answer) hits++;
+else errors++;
+});
+
+document.getElementById("hits").innerText = hits;
+document.getElementById("errors").innerText = errors;
+document.getElementById("notAnswered").innerText = notAnswered;
+}
+
+function nextQuestion(){
+if(currentQuestion < questions.length - 1){
+currentQuestion++;
+renderQuestion();
+}
+}
+
+function previousQuestion(){
+if(currentQuestion > 0){
+currentQuestion--;
+renderQuestion();
+}
+}
+
+function updateGrid(){
+const grid = document.getElementById("grid");
+grid.innerHTML = "";
+
+questions.forEach((q,index)=>{
+let className = "grid-btn";
+
+if(index === currentQuestion){
+className += " current";
+}else if(answers[index] !== null){
+if(answers[index] === q.answer) className += " correct";
+else className += " wrong";
+}
+
+grid.innerHTML += `<button class="${className}" onclick="goToQuestion(${index})">${index + 41}</button>`;
+});
+}
+
+function goToQuestion(index){
+currentQuestion = index;
+renderQuestion();
+}
+
+function printAllQuestions(){
+let printWindow = window.open('', '_blank');
+
+let html = `
+<html>
+<head>
+<title>Impressão PDF</title>
+<style>
+body{font-family:Arial, Helvetica, sans-serif;padding:30px;background:white;color:#000;line-height:1.6}
+h1{text-align:center;color:#0b57d0;margin-bottom:40px}
+.question{border:2px solid #ccc;border-radius:15px;padding:25px;margin-bottom:30px;page-break-inside:avoid}
+.question-title{font-size:22px;font-weight:bold;color:#004080;margin-bottom:20px}
+.option{padding:12px;margin-bottom:10px;border-radius:10px;background:#f1f1f1}
+.correct{background:#c8ffd2;border:2px solid #2e7d32;font-weight:bold}
+.comment{margin-top:20px;background:#ffe0e0;padding:18px;border-left:6px solid red;border-radius:10px}
+</style>
+</head>
+<body>
+<h1>CURSO DE CONTABILIDADE PROFESSOR MOREIRA</h1>
+`;
+
+questions.forEach((q,index)=>{
+html += `
+<div class="question">
+<div class="question-title">Questão ${index + 41}</div>
+<div>${q.question.replace(/\n/g,"<br>")}</div>
+<br>
+`;
+
+q.options.forEach((option,i)=>{
+html += `<div class="option ${i === q.answer ? 'correct' : ''}">${option}</div>`;
+});
+
+html += `
+<div class="comment">
+<b>Comentário:</b><br>
+${q.comment}
+</div>
+</div>
+`;
+});
+
+html += `</body></html>`;
+
+printWindow.document.write(html);
+printWindow.document.close();
+printWindow.focus();
+
+setTimeout(()=>{
+printWindow.print();
+},500);
+}
+
+renderQuestion();
+updateScore();
+</script>
+
+</body>
+</html>
